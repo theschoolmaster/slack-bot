@@ -18,6 +18,19 @@ function respond() {
 
   if(request.text){
 
+    // check status of XBoxLive user
+    if(RegExp("^!live (.+)", 'i').test(request.text)) {
+      var gamertag = RegExp("^!live (.+)", 'i').exec(request.text)[1];
+
+      xboxApi.profile
+        .xuid(gamertag, function(err, returnedXuid){ 
+          var status = xboxApi.profile.activity(returnedXuid);
+          this.res.writeHead(200);
+          postMessage(status);
+          this.res.end();        
+        })
+    }
+
     // Resonse to "hello nawbot"
     if(RegExp("^hello nawbot$", 'i').test(request.text)) {
       this.res.writeHead(200);
@@ -39,7 +52,7 @@ function respond() {
       this.res.end();
     }
   }
-  
+
 }
 
 function postMessage(msg) {
