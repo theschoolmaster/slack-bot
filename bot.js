@@ -11,6 +11,21 @@ function respond() {
     this.res.writeHead(200);
     postMessage();
     this.res.end();
+  } else if(request.text && RegExp("^text logan$").test(request.text)) {
+    var texts = ['Are you coming? My battery ubisnabkit to do above the tondo. And',
+                'Fish',
+                'Can your poco me up',
+                'Alol-zgah hayha',
+                'Umm. I might need a rode ho lpl',
+                'Hi',
+                'U Jane fps for toy',
+                'Gosh',
+                'My battery us dying'],
+        rand = Math.floor(Math.random() * texts.length ) 
+
+    this.res.writeHead(200);
+    postMessage(texts[rand]);
+    this.res.end();
   } else {
     console.log("don't care");
     this.res.writeHead(200);
@@ -18,10 +33,10 @@ function respond() {
   }
 }
 
-function postMessage() {
+function postMessage(msg) {
   var botResponse, options, body, botReq;
 
-  botResponse = cool();
+  botResponse = msg || cool();
 
   options = {
     hostname: 'api.groupme.com',
