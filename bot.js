@@ -1,3 +1,5 @@
+var apiKey  = process.env.XBOX_API
+var xboxApi = require('node-xbox')(apiKey);
 var HTTPS = require('https');
 var texts = [
     'Are you coming? My battery ubisnabkit to do above the tondo. And',
