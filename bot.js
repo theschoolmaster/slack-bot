@@ -26,10 +26,19 @@ function respond() {
       var that = this
       xboxApi.profile.xuid(gamertag, function(err, returnedXuid){ 
         xboxApi.profile.presence(returnedXuid, function(err, returnedPresence){
-          var response = ""
-          response += gamertag
-          response += " is "
-          response += JSON.parse(returnedPresence).state
+          var returnedPresence = JSON.parse(returnedPresence)
+          var response = gamertag + " is " + returnedPresence.state + "\n"
+
+          if(returnedPresence.state === "Offline"){
+            response += "Last seen: "
+            response += returnedPresence.lastSeen.timestamp + " "
+            response += "Playing: "
+            response += returnedPresence.lastSeen.titleName
+          } else if(returnedPresence.state === "Online") {
+            response += "Playing: "
+            response += returnedPresence.devices[0].titles[1].name
+          }
+
           that.res.writeHead(200);
           postMessage(response);
           that.res.end();        
