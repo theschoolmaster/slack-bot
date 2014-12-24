@@ -1,9 +1,9 @@
-var http, director, cool, bot, router, server, port;
+var http, director, xboxApi, bot, router, server, port;
 
 http        = require('http');
 director    = require('director');
-cool        = require('cool-ascii-faces');
 bot         = require('./bot.js');
+xboxApi     = require('./xboxApi.js');
 
 router = new director.http.Router({
   '/' : {
