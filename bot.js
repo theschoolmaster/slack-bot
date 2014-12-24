@@ -24,13 +24,17 @@ function respond() {
     if(RegExp("^!live (.+)", 'i').test(request.text)) {
       var gamertag = RegExp("^!live (.+)", 'i').exec(request.text)[1];
       var that = this
-      xboxApi.profile
-        .xuid(gamertag, function(err, returnedXuid){ 
-          var status = xboxApi.profile.activity(returnedXuid);
+      xboxApi.profile.xuid(gamertag, function(err, returnedXuid){ 
+        xboxApi.profile.presence(returnedXuid, function(err, returnedPresence){
+          var response = ""
+          response += gamertag
+          response += " is "
+          response += JSON.parse(returnedPresence).state
           that.res.writeHead(200);
-          postMessage(status);
+          postMessage(response);
           that.res.end();        
         })
+      })
     }
 
     // Resonse to "hello nawbot"
