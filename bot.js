@@ -30,7 +30,7 @@ function respond() {
           this.res.writeHead(200);
           postMessage(status);
           this.res.end();        
-        })
+        }).bind(this)
     }
 
     // Resonse to "hello nawbot"
