@@ -2,8 +2,8 @@ var http, director, xboxApi, bot, router, server, port;
 
 http        = require('http');
 director    = require('director');
-bot         = require('./bot.js');
 xboxApi     = require('./xboxApi.js');
+bot         = require('./bot.js');
 
 router = new director.http.Router({
   '/' : {
