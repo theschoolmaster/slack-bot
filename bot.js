@@ -23,14 +23,14 @@ function respond() {
     // check status of XBoxLive user
     if(RegExp("^!live (.+)", 'i').test(request.text)) {
       var gamertag = RegExp("^!live (.+)", 'i').exec(request.text)[1];
-
+      var that = this
       xboxApi.profile
         .xuid(gamertag, function(err, returnedXuid){ 
           var status = xboxApi.profile.activity(returnedXuid);
-          this.res.writeHead(200);
+          that.res.writeHead(200);
           postMessage(status);
-          this.res.end();        
-        }).bind(this)
+          that.res.end();        
+        })
     }
 
     // Resonse to "hello nawbot"
