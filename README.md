@@ -8,3 +8,4 @@ Now he lives on heroku and uses node and GroupMe.
 ## Current commands
 - 'hello nawbot'
 - 'text logan'
+- '!live GAMERTAG'
