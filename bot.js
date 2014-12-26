@@ -31,7 +31,7 @@ function respond() {
 
                     if (returnedPresence.state === "Offline") {
                         response += "Last seen: "
-                        response += returnedPresence.lastSeen.timestamp + " "
+                        response += formatDate(new Date(Date.parse(returnedPresence.lastSeen.timestamp))) + "\n"
                         response += "Playing: "
                         response += returnedPresence.lastSeen.titleName
                     } else if (returnedPresence.state === "Online") {
@@ -101,6 +101,14 @@ function postMessage(msg) {
         console.log('timeout posting message ' + JSON.stringify(err))
     })
     botReq.end(JSON.stringify(body))
+}
+
+function formatDate(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes
+    return strTime + " on " + (date.getMonth() + 1) + "." + date.getDate() + "." + date.getFullYear()
 }
 
 
