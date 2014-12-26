@@ -16,7 +16,8 @@ test $KEEP_DYNO_UP && (
 ) &
 
 # Then replace this process with web server process
-exec node ./app/index.js
-
-# development
-# exec node ./nawbot/index.js
+if [ "${NODE_ENV}" == "production" ]; then
+  exec node ./app/index.js
+else
+  exec node ./nawbot/index.js
+fi
