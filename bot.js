@@ -21,29 +21,44 @@ function respond() {
     if (request.text) {
 
         // check status of XBoxLive user
+        
+
         if (RegExp("^!live (.+)", 'i').test(request.text)) {
-            var gamertag = RegExp("^!live (.+)", 'i').exec(request.text)[1]
-            var that = this
-            xboxApi.profile.xuid(gamertag, function(err, returnedXuid) {
-                xboxApi.profile.presence(returnedXuid, function(err, returnedPresence) {
-                    var returnedPresence = JSON.parse(returnedPresence)
-                    var response = gamertag + " is " + returnedPresence.state + "\n"
+            
+            var commands = RegExp("!live (add|remove) (.+)$", 'i').exec(request.text)
+            
+            if (commands ? (commands[1] === "add" ? true : false) : false) {
+                var tag = commands[2]
+                addPlayer({gamertag: tag})
+                this.res.writeHead(200)
+                postMessage("Added gamertag " + tag + " to the roster")
+                this.res.end()
 
-                    if (returnedPresence.state === "Offline") {
-                        response += "Last seen: "
-                        response += formatDate(new Date(Date.parse(returnedPresence.lastSeen.timestamp))) + "\n"
-                        response += "Playing: "
-                        response += returnedPresence.lastSeen.titleName
-                    } else if (returnedPresence.state === "Online") {
-                        response += "Playing: "
-                        response += returnedPresence.devices[0].titles[1].name
-                    }
+            } else {
 
-                    that.res.writeHead(200)
-                    postMessage(response)
-                    that.res.end()
+                var gamertag = RegExp("!live (.+)$", 'i').exec(request.text)[1]
+                var that = this
+                xboxApi.profile.xuid(gamertag, function(err, returnedXuid) {
+                    xboxApi.profile.presence(returnedXuid, function(err, returnedPresence) {
+                        var returnedPresence = JSON.parse(returnedPresence)
+                        var response = gamertag + " is " + returnedPresence.state + "\n"
+
+                        if (returnedPresence.state === "Offline") {
+                            response += "Last seen: "
+                            response += formatDate(new Date(Date.parse(returnedPresence.lastSeen.timestamp))) + "\n"
+                            response += "Playing: "
+                            response += returnedPresence.lastSeen.titleName
+                        } else if (returnedPresence.state === "Online") {
+                            response += "Playing: "
+                            response += returnedPresence.devices[0].titles[1].name
+                        }
+
+                        that.res.writeHead(200)
+                        postMessage(response)
+                        that.res.end()
+                    })
                 })
-            })
+            }
         }
 
         // Resonse to "hello nawbot"
@@ -111,5 +126,12 @@ function formatDate(date) {
     return strTime + " on " + (date.getMonth() + 1) + "." + date.getDate() + "." + date.getFullYear()
 }
 
+function addToDb(model, object){
+    return function(object){
+        new model(object).save()
+    }
+}
+
+var addPlayer = addToDb(Player)
 
 exports.respond = respond
