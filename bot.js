@@ -21,8 +21,6 @@ function respond() {
     if (request.text) {
 
         // check status of XBoxLive user
-        
-
         if (RegExp("^!live (.+)", 'i').test(request.text)) {
             var gamertag = RegExp("^!live (.+)", 'i').exec(request.text)[1]
             var that = this
@@ -45,7 +43,7 @@ function respond() {
                     postMessage(response)
                     that.res.end()
                 })
-            }
+            })
         }
 
         // Resonse to "hello nawbot"
@@ -113,12 +111,5 @@ function formatDate(date) {
     return strTime + " on " + (date.getMonth() + 1) + "." + date.getDate() + "." + date.getFullYear()
 }
 
-function addToDb(model, object){
-    return function(object){
-        new model(object).save()
-    }
-}
-
-var addPlayer = addToDb(Player)
 
 exports.respond = respond
