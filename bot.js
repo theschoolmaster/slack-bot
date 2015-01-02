@@ -27,7 +27,7 @@ function respond() {
             xboxApi.profile.xuid(gamertag, function(err, returnedXuid) {
                 xboxApi.profile.presence(returnedXuid, function(err, returnedPresence) {
                     var returnedPresence = JSON.parse(returnedPresence)
-                    var response = gamertag + " is " + returnedPresence.state + "\n"
+                    var response = "@" + gamertag + " is " + returnedPresence.state + "\n"
 
                     if (returnedPresence.state === "Offline") {
                         response += "Last seen: "
