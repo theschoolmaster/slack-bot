@@ -24,6 +24,7 @@ function respond() {
         console.log(request)
         if (keyword == "live") {
             var gamertag = request.text
+
             var that = this
             xboxApi.profile.xuid(gamertag, function(err, returnedXuid) {
                 xboxApi.profile.presence(returnedXuid, function(err, returnedPresence) {
@@ -45,7 +46,7 @@ function respond() {
                     that.res.end()
                 })
             })
-        
+
         }
 
         // Resonse to "hello nawbot"
@@ -113,12 +114,5 @@ function formatDate(date) {
     return strTime + " on " + (date.getMonth() + 1) + "." + date.getDate() + "." + date.getFullYear()
 }
 
-function addToDb(model, object){
-    return function(object){
-        new model(object).save()
-    }
-}
-
-var addPlayer = addToDb(Player)
 
 exports.respond = respond
