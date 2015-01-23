@@ -2,6 +2,7 @@ var botID   = process.env.BOT_ID
 var apiKey  = process.env.XBOX_API
 var xboxApi = require('node-xbox')(apiKey)
 var HTTPS   = require('https')
+
 var texts   = [
     'Are you coming? My battery ubisnabkit to do above the tondo. And',
     'Fish',
@@ -16,53 +17,39 @@ var texts   = [
 
 
 function respond() {
-    var request = JSON.parse(this.req.chunks[0])
+    var request = JSON.parse(this.req.chunks[0]),
+        keyword = this.req.params.keyword
 
     if (request.text) {
+        console.log(request)
+        if (keyword == "live") {
+            var gamertag = request.text
+            var that = this
+            xboxApi.profile.xuid(gamertag, function(err, returnedXuid) {
+                xboxApi.profile.presence(returnedXuid, function(err, returnedPresence) {
+                    var returnedPresence = JSON.parse(returnedPresence)
+                    var response = gamertag + " is " + returnedPresence.state + "\n"
 
-        // check status of XBoxLive user
-        
+                    if (returnedPresence.state === "Offline") {
+                        response += "Last seen: "
+                        response += formatDate(new Date(Date.parse(returnedPresence.lastSeen.timestamp))) + "\n"
+                        response += "Playing: "
+                        response += returnedPresence.lastSeen.titleName
+                    } else if (returnedPresence.state === "Online") {
+                        response += "Playing: "
+                        response += returnedPresence.devices[0].titles[1].name
+                    }
 
-        if (RegExp("^!live (.+)", 'i').test(request.text)) {
-            
-            var commands = RegExp("!live (add|remove) (.+)$", 'i').exec(request.text)
-            
-            if (commands ? (commands[1] === "add" ? true : false) : false) {
-                var tag = commands[2]
-                addPlayer({gamertag: tag})
-                this.res.writeHead(200)
-                postMessage("Added gamertag " + tag + " to the roster")
-                this.res.end()
-
-            } else {
-
-                var gamertag = RegExp("!live (.+)$", 'i').exec(request.text)[1]
-                var that = this
-                xboxApi.profile.xuid(gamertag, function(err, returnedXuid) {
-                    xboxApi.profile.presence(returnedXuid, function(err, returnedPresence) {
-                        var returnedPresence = JSON.parse(returnedPresence)
-                        var response = gamertag + " is " + returnedPresence.state + "\n"
-
-                        if (returnedPresence.state === "Offline") {
-                            response += "Last seen: "
-                            response += formatDate(new Date(Date.parse(returnedPresence.lastSeen.timestamp))) + "\n"
-                            response += "Playing: "
-                            response += returnedPresence.lastSeen.titleName
-                        } else if (returnedPresence.state === "Online") {
-                            response += "Playing: "
-                            response += returnedPresence.devices[0].titles[1].name
-                        }
-
-                        that.res.writeHead(200)
-                        postMessage(response)
-                        that.res.end()
-                    })
+                    that.res.writeHead(200)
+                    postMessage(response)
+                    that.res.end()
                 })
-            }
+            })
+        
         }
 
         // Resonse to "hello nawbot"
-        if (RegExp("^hello nawbot$", 'i').test(request.text)) {
+        if (RegExp("^hey $", 'i').test(request.text)) {
             this.res.writeHead(200)
             postMessage("Very nice of you to think of me.  I was starting to feel neglected")
             this.res.end()
