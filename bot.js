@@ -17,13 +17,16 @@ var texts   = [
 
 
 function respond() {
-    var request = JSON.parse(this.req.chunks[0]),
-        keyword = this.req.params.keyword
+    var request = JSON.parse(this.req.body)
+    var sourceChannel = request.channel_name
+    var keyword = request.trigger_word
+    var sourceUser = request.user_name
+    var message = request.text
 
     if (request.text) {
-        console.log(request)
-        if (keyword == "live") {
-            var gamertag = request.text
+        console.log(sourceUser + " " + sourceChannel + " " + keyword + " " + message)
+        if (keyword == "!live") {
+            var gamertag = message.replace(RegExp(keyword + " ", ""))
 
             var that = this
             xboxApi.profile.xuid(gamertag, function(err, returnedXuid) {
@@ -42,7 +45,7 @@ function respond() {
                     }
 
                     that.res.writeHead(200)
-                    postMessage(response)
+                    postMessage(response, sourceChannel)
                     that.res.end()
                 })
             })
@@ -71,20 +74,22 @@ function respond() {
 
 }
 
-function postMessage(msg) {
+function postMessage(msg, channel) {
     var botResponse, options, body, botReq
 
     botResponse = msg
 
     options = {
-        hostname: 'api.groupme.com',
-        path: '/v3/bots/post',
+        hostname: 'hooks.slack.com',
+        path: '/services/T03E23VAN/B03E4RPMW/Ll7ooC6utnGJ7S6flQQ0xOS8',
         method: 'POST'
     }
 
     body = {
-        "bot_id": botID,
-        "text": botResponse
+        "channel": "#" + channel,
+        "username": "webhookbot",
+        "text": botResponse,
+        "icon_emoji": ":ghost:"
     }
 
     console.log('sending ' + botResponse + ' to ' + botID)
