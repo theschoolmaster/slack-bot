@@ -1,4 +1,3 @@
-var botID   = process.env.BOT_ID
 var apiKey  = process.env.XBOX_API
 var xboxApi = require('node-xbox')(apiKey)
 var HTTPS   = require('https')
