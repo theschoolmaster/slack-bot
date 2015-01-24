@@ -16,17 +16,17 @@ var texts   = [
 
 
 function respond() {
-    var request = JSON.parse(this.req.body)
-    var sourceChannel = request.channel_name
-    var keyword = request.trigger_word
-    var sourceUser = request.user_name
-    var message = request.text
+        console.log(this.req.body)
+    var request       = this.req.body,
+        sourceChannel = request.channel_name,
+        keyword       = request.trigger_word,
+        sourceUser    = request.user_name,
+        message       = request.text
 
     if (request.text) {
-        console.log(sourceUser + " " + sourceChannel + " " + keyword + " " + message)
         if (keyword == "!live") {
-            var gamertag = message.replace(RegExp(keyword + " ", ""))
-
+            var gamertag = message.replace(RegExp(keyword + " "), "")
+            console.log(gamertag)
             var that = this
             xboxApi.profile.xuid(gamertag, function(err, returnedXuid) {
                 xboxApi.profile.presence(returnedXuid, function(err, returnedPresence) {
@@ -48,13 +48,12 @@ function respond() {
                     that.res.end()
                 })
             })
-
         }
 
         // Resonse to "hello nawbot"
         if (RegExp("^hey $", 'i').test(request.text)) {
             this.res.writeHead(200)
-            postMessage("Very nice of you to think of me.  I was starting to feel neglected")
+            postMessage("Very nice of you to think of me.  I was starting to feel neglected", sourceChannel)
             this.res.end()
         }
 
@@ -62,7 +61,7 @@ function respond() {
         if (RegExp("^text logan$", 'i').test(request.text)) {
             rand = Math.floor(Math.random() * texts.length)
             this.res.writeHead(200)
-            postMessage(texts[rand])
+            postMessage(texts[rand], sourceChannel)
             this.res.end()
         } else {
             console.log("don't care")
@@ -70,7 +69,6 @@ function respond() {
             this.res.end()
         }
     }
-
 }
 
 function postMessage(msg, channel) {
@@ -86,12 +84,12 @@ function postMessage(msg, channel) {
 
     body = {
         "channel": "#" + channel,
-        "username": "webhookbot",
+        "username": "xblBot",
         "text": botResponse,
         "icon_emoji": ":ghost:"
     }
 
-    console.log('sending ' + botResponse + ' to ' + botID)
+    console.log('sending ' + botResponse + ' to Slack channel: #' + channel)
 
     botReq = HTTPS.request(options, function(res) {
         if (res.statusCode == 202) {
