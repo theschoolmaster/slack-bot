@@ -48,21 +48,6 @@ function respond() {
                     that.res.end()
                 })
             })
-        }
-
-        // Resonse to "hello nawbot"
-        if (RegExp("^hey $", 'i').test(request.text)) {
-            this.res.writeHead(200)
-            postMessage("Very nice of you to think of me.  I was starting to feel neglected", sourceChannel)
-            this.res.end()
-        }
-
-        // Logan's drunk texts
-        if (RegExp("^text logan$", 'i').test(request.text)) {
-            rand = Math.floor(Math.random() * texts.length)
-            this.res.writeHead(200)
-            postMessage(texts[rand], sourceChannel)
-            this.res.end()
         } else {
             console.log("don't care")
             this.res.writeHead(200)

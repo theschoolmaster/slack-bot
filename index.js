@@ -1,21 +1,8 @@
 var http, director, bot, router, server, port
 
-// mongoose = require('mongoose')
-// Player = mongoose.model("Player", {name: String, gamertag: String})
 http     = require('http')
 director = require('director')
 bot      = require('./bot.js')
-
-
-// if(process.env.NODE_ENV === "production") {
-//     mongoose.connect("mongodb://nawbot:" + process.env.MONGO_PW + "@ds051160.mongolab.com:51160/heroku_app32798926")
-// } else {
-//     mongoose.connect('mongodb://localhost/nawbot')
-// }
-
-// Player.find( function(err, all){
-//     console.log(err ? err : all)
-// })
 
 router = new director.http.Router({
     '/:keyword': {
