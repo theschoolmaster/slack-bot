@@ -2,26 +2,14 @@ var apiKey  = process.env.XBOX_API
 var xboxApi = require('node-xbox')(apiKey)
 var HTTPS   = require('https')
 
-var texts   = [
-    'Are you coming? My battery ubisnabkit to do above the tondo. And',
-    'Fish',
-    'Can your poco me up',
-    'Alol-zgah hayha',
-    'Umm. I might need a rode ho lpl',
-    'Hi',
-    'U Jane fps for toy',
-    'Gosh',
-    'My battery us dying'
-]
-
-
 function respond() {
-        console.log(this.req.body)
     var request       = this.req.body,
         sourceChannel = request.channel_name,
         keyword       = request.trigger_word,
         sourceUser    = request.user_name,
         message       = request.text
+
+    console.log(request)
 
     if (request.text) {
         if (keyword == "!live") {
