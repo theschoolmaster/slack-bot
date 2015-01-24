@@ -86,7 +86,7 @@ function postMessage(msg, channel) {
         "channel": "#" + channel,
         "username": "xblBot",
         "text": botResponse,
-        "icon_emoji": ":ghost:"
+        "icon_emoji": ":video_game:"
     }
 
     console.log('sending ' + botResponse + ' to Slack channel: #' + channel)
