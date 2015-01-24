@@ -14,12 +14,13 @@ function respond() {
     if (request.text) {
         if (keyword == "!live") {
             var gamertag = message.replace(RegExp(keyword + " "), "")
-            console.log(gamertag)
             var that = this
+
             xboxApi.profile.xuid(gamertag, function(err, returnedXuid) {
                 xboxApi.profile.presence(returnedXuid, function(err, returnedPresence) {
                     var returnedPresence = JSON.parse(returnedPresence)
                     var response = gamertag + " is " + returnedPresence.state + "\n"
+                    console.log(returnedPresence)
 
                     if (returnedPresence.state === "Offline") {
                         response += "Last seen: "
@@ -27,7 +28,6 @@ function respond() {
                         response += "Playing: "
                         response += returnedPresence.lastSeen.titleName
                     } else if (returnedPresence.state === "Online") {
-                        console.log(returnedPresence)
                         response += "Playing: "
                         var device = returnedPresence.devices[0]
                         if (device.type === "Xbox360"){
