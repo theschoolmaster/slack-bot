@@ -54,11 +54,7 @@ function respond() {
                     that.res.end()
                 })
             })
-        } else {
-            console.log("don't care")
-            this.res.writeHead(200)
-            this.res.end()
-        }
+        } 
     }
 }
 
@@ -83,7 +79,7 @@ function postMessage(msg, channel) {
     console.log('sending ' + botResponse + ' to Slack channel: #' + channel)
 
     botReq = HTTPS.request(options, function(res) {
-        if (res.statusCode == 202) {
+        if (res.statusCode == 200) {
             //neat
         } else {
             console.log('rejecting bad status code ' + res.statusCode)
