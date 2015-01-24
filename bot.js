@@ -29,7 +29,12 @@ function respond() {
                     } else if (returnedPresence.state === "Online") {
                         console.log(returnedPresence)
                         response += "Playing: "
-                        response += returnedPresence.devices[0].titles[1].name
+                        var device = returnedPresence.devices[0]
+                        if (device.type === "Xbox360"){
+                            response += device.titles[0].name
+                        } else {
+                            response += returnedPresence.devices[0].titles[1].name
+                        }
                     }
 
                     that.res.writeHead(200)
