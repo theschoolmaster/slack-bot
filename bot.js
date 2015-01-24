@@ -27,6 +27,7 @@ function respond() {
                         response += "Playing: "
                         response += returnedPresence.lastSeen.titleName
                     } else if (returnedPresence.state === "Online") {
+                        console.log(returnedPresence)
                         response += "Playing: "
                         response += returnedPresence.devices[0].titles[1].name
                     }
