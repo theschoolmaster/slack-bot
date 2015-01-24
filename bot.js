@@ -40,10 +40,9 @@ function respond() {
                             if (console.type === "Xbox360"){
                                 response += console.titles[0].name
                             } else if (console.type === "XboxOne") {
-                                currentGame = console.titles
-                                    .filter(function(app) {
-                                        return app.placement == "Full"
-                                    })
+                                currentGame = console.titles.filter(function(app) {
+                                    return app.placement === "Full"
+                                })[0]
                                 response += currentGame.name
                             }
                         })
