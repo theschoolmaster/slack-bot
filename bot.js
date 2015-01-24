@@ -18,23 +18,35 @@ function respond() {
 
             xboxApi.profile.xuid(gamertag, function(err, returnedXuid) {
                 xboxApi.profile.presence(returnedXuid, function(err, returnedPresence) {
+                    
                     var returnedPresence = JSON.parse(returnedPresence)
                     var response = gamertag + " is " + returnedPresence.state + "\n"
+                    
                     console.log(returnedPresence)
 
                     if (returnedPresence.state === "Offline") {
-                        response += "Last seen: "
-                        response += formatDate(new Date(Date.parse(returnedPresence.lastSeen.timestamp))) + "\n"
-                        response += "Playing: "
-                        response += returnedPresence.lastSeen.titleName
-                    } else if (returnedPresence.state === "Online") {
-                        response += "Playing: "
-                        var device = returnedPresence.devices[0]
-                        if (device.type === "Xbox360"){
-                            response += device.titles[0].name
-                        } else {
-                            response += returnedPresence.devices[0].titles[1].name
+                        if (returnedPresence.lastSeen) {
+                            response += "Last seen: "
+                            response += formatDate(new Date(Date.parse(returnedPresence.lastSeen.timestamp))) + "\n"
+                            response += "Playing: "
+                            response += returnedPresence.lastSeen.titleName
                         }
+                    } else if (returnedPresence.state === "Online") {
+                        var consoles = returnedPresence.devices,
+                            game
+
+                        consoles.forEach(function(console){
+                            response += "Playing: "
+                            if (console.type === "Xbox360"){
+                                response += console.titles[0].name
+                            } else if (console.type === "XboxOne") {
+                                currentGame = console.titles
+                                    .filter(function(app) {
+                                        return app.placement == "Full"
+                                    })
+                                response += currentGame.name
+                            }
+                        })
                     }
 
                     that.res.writeHead(200)
