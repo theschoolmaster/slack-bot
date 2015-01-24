@@ -45,6 +45,8 @@ function respond() {
                                 })[0]
                                 response += currentGame.name
                             }
+                            response += " on  "
+                            response += console.type                        
                         })
                     }
 
