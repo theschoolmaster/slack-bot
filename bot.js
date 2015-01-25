@@ -1,61 +1,91 @@
 var apiKey  = process.env.XBOX_API
 var xboxApi = require('node-xbox')(apiKey)
 var HTTPS   = require('https')
+var Q       = require('q')
 
 function respond() {
     var request       = this.req.body,
+    // var request       = JSON.parse(this.req.chunks[0]), //dev
         sourceChannel = request.channel_name,
         keyword       = request.trigger_word,
         sourceUser    = request.user_name,
         message       = request.text
-
-    console.log(request)
+        gamertag      = message.replace(RegExp(keyword + " "), "")
+        self          = this
 
     if (request.text) {
         if (keyword == "!live") {
-            var gamertag = message.replace(RegExp(keyword + " "), "")
-            var that = this
-
-            xboxApi.profile.xuid(gamertag, function(err, returnedXuid) {
-                xboxApi.profile.presence(returnedXuid, function(err, returnedPresence) {
-                    
-                    var returnedPresence = JSON.parse(returnedPresence)
-                    var response = gamertag + " is " + returnedPresence.state + "\n"
-                    
-                    console.log(returnedPresence)
-
-                    if (returnedPresence.state === "Offline") {
-                        if (returnedPresence.lastSeen) {
-                            response += "Last seen: "
-                            response += formatDate(new Date(Date.parse(returnedPresence.lastSeen.timestamp))) + "\n"
-                            response += "Playing: "
-                            response += returnedPresence.lastSeen.titleName
-                        }
-                    } else if (returnedPresence.state === "Online") {
-                        var consoles = returnedPresence.devices,
-                            game
-
-                        consoles.forEach(function(console){
-                            response += "Playing: "
-                            if (console.type === "Xbox360"){
-                                response += console.titles[0].name
-                            } else if (console.type === "XboxOne") {
-                                currentGame = console.titles.filter(function(app) {
-                                    return app.placement === "Full"
-                                })[0]
-                                response += currentGame.name
-                            }
-                        })
-                    }
-
-                    that.res.writeHead(200)
-                    postMessage(response, sourceChannel)
-                    that.res.end()
+            getXuid(gamertag)
+                .then(function(xuid){
+                    return getPresence(xuid)
                 })
-            })
-        } 
+                .then(function(presenceJson){
+                    return prepareResponse(presenceJson)
+                })
+                .then(function(response){
+                    self.res.writeHead(200)
+                    postMessage(response, sourceChannel)
+                    self.res.end()
+                })
+        }
     }
 }
+
+
+function getXuid(gamertag){
+    var deferred = Q.defer()
+    xboxApi.profile.xuid(gamertag, function(err, data){
+        err ? deferred.reject(new Error(err)) : deferred.resolve(data)
+    })
+
+    return deferred.promise
+}
+
+function getPresence(xuid){
+    var deferred = Q.defer()
+    xboxApi.profile.presence(xuid, function(err, data){
+        err ? deferred.reject(new Error(err)) : deferred.resolve(data)
+    })
+    return deferred.promise
+}
+
+function prepareResponse(presenceJson) {
+    var deferred = Q.defer()
+    var returnedPresence = JSON.parse(presenceJson)
+    // var returnedPresence = presenceJson //dev
+    var reply = gamertag + " is " + returnedPresence.state + "\n"
+    
+    if (returnedPresence.state === "Offline") {
+        if (returnedPresence.lastSeen) {
+            reply += "Last seen: "
+            reply += formatDate(new Date(Date.parse(returnedPresence.lastSeen.timestamp))) + "\n"
+            reply += "Playing: "
+            reply += returnedPresence.lastSeen.titleName
+        }
+    } else if (returnedPresence.state === "Online") {
+        var consoles = returnedPresence.devices,
+            game
+
+        consoles.forEach(function(console){
+            reply += "Playing: "
+            if (console.type === "Xbox360"){
+                reply += console.titles[0].name
+            } else if (console.type === "XboxOne") {
+                currentGame = console.titles.filter(function(app) {
+                    return app.placement === "Full"
+                })[0]
+                reply += currentGame.name
+            }
+            reply += " on  "
+            reply += console.type                        
+        })
+    }
+
+    deferred.resolve(reply)
+    return deferred.promise
+}
+
+
 
 function postMessage(msg, channel) {
     var botResponse, options, body, botReq

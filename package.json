@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "director": "",
-    "node-xbox": "^0.1.0"
+    "node-xbox": "^0.1.0",
+    "q": "^1.1.2"
   },
   "engines": {
     "node": "0.10.x"
