@@ -16,16 +16,15 @@ function respond() {
     if (request.text) {
         if (keyword == "!live") {
             getXuid(gamertag)
-                .then(function(xuid){
-                    return getPresence(xuid)
-                })
-                .then(function(presenceJson){
-                    return prepareResponse(presenceJson)
-                })
+                .then(getPresence)
+                .then(prepareResponse)
                 .then(function(response){
                     self.res.writeHead(200)
                     postMessage(response, sourceChannel)
                     self.res.end()
+                })
+                .catch(function(error) {
+                    console.log(error)
                 })
         }
     }
@@ -37,7 +36,6 @@ function getXuid(gamertag){
     xboxApi.profile.xuid(gamertag, function(err, data){
         err ? deferred.reject(new Error(err)) : deferred.resolve(data)
     })
-
     return deferred.promise
 }
 
@@ -50,21 +48,19 @@ function getPresence(xuid){
 }
 
 function prepareResponse(presenceJson) {
-    var deferred = Q.defer()
-    var returnedPresence = JSON.parse(presenceJson)
-    // var returnedPresence = presenceJson //dev
-    var reply = gamertag + " is " + returnedPresence.state + "\n"
+    var deferred = Q.defer(),
+        presence = JSON.parse(presenceJson),
+        reply = gamertag + " is " + presence.state + "\n"
     
-    if (returnedPresence.state === "Offline") {
-        if (returnedPresence.lastSeen) {
+    if (presence.state === "Offline") {
+        if (presence.lastSeen) {
             reply += "Last seen: "
-            reply += formatDate(new Date(Date.parse(returnedPresence.lastSeen.timestamp))) + "\n"
+            reply += formatDate(new Date(Date.parse(presence.lastSeen.timestamp))) + "\n"
             reply += "Playing: "
-            reply += returnedPresence.lastSeen.titleName
+            reply += presence.lastSeen.titleName
         }
-    } else if (returnedPresence.state === "Online") {
-        var consoles = returnedPresence.devices,
-            game
+    } else if (presence.state === "Online") {
+        var consoles = presence.devices
 
         consoles.forEach(function(console){
             reply += "Playing: "
