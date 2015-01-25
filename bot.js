@@ -1,7 +1,7 @@
 var apiKey  = process.env.XBOX_API
 var xboxApi = require('node-xbox')(apiKey)
 var HTTPS   = require('https')
-var Q       = require('Q')
+var Q       = require('q')
 
 function respond() {
     var request       = this.req.body,
