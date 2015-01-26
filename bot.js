@@ -21,10 +21,10 @@ function respond() {
                 .then(XBL.getPresence)
                 .then(XBL.prepareResponse)
                 .then(function(response){
-                    console.log(response)
-                    // self.res.writeHead(200)
-                    // postMessage(response, sourceChannel)
-                    // self.res.end()
+                    // console.log(response)
+                    self.res.writeHead(200)
+                    postMessage(response, sourceChannel)
+                    self.res.end()
                 })
                 .catch(function(error) {
                     console.log(error)
