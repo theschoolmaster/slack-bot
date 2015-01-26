@@ -1,9 +1,11 @@
-var HTTPS   = require('https')
-var XBL     = require('./live-api.js')
+var HTTPS, XBL
+
+HTTPS = require('https')
+XBL   = require('./live-api.js')
 
 function respond() {
-    // var request       = this.req.body,
-    var request       = JSON.parse(this.req.chunks[0]), //dev
+    var request       = this.req.body,
+    // var request       = JSON.parse(this.req.chunks[0]), //dev
         sourceChannel = request.channel_name,
         keyword       = request.trigger_word,
         sourceUser    = request.user_name,
