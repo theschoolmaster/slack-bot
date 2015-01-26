@@ -11,7 +11,7 @@ test $KEEP_DYNO_UP && (
  while true ; do
    echo pinging
    curl -s http://nawbot.herokuapp.com > /dev/null
-   sleep 30
+   sleep 120
  done
 ) &
 
