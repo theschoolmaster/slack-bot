@@ -37,6 +37,7 @@ function respond() {
 }
 
 function replytWith(context, body) {
+    console.log("Replying with " + body)
     context.res.writeHead(200, { 'Content-Type': 'application/json' })
     context.res.end('{"text": "' + body + '"}')
 }
