@@ -1,7 +1,7 @@
 {
     "name": "Nawbot",
-    "description": "Node bot for the NAW1 channel",
-    "repository": "https://github.com/audiblelbink/gm-nawbot",
+    "description": "Node bot for the Reddit Casual Team",
+    "repository": "https://github.com/audiblelbink/slack-bot",
     "logo": "",
     "keywords": []
 }

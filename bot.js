@@ -32,6 +32,11 @@ function respond() {
                     console.log(error)
                 })
         }
+
+        if (keyword == "!ping") {
+            this.res.writeHead(200, { 'Content-Type': 'application/json' })
+            this.res.end('{"text": "pong!"}')
+        }
     }
 }
 
