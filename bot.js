@@ -1,7 +1,9 @@
-var HTTPS, XBL
+var HTTPS, XBL, slackTeam, slackToken
 
-HTTPS = require('https')
-XBL   = require('./live-api.js')
+HTTPS       = require('https')
+XBL         = require('./live-api.js')
+slackTeam   = process.env.SLACK_TEAM
+slackToken  = process.env.SLACK_TOKEN
 
 function respond() {
     var request       = this.req.body,
@@ -41,7 +43,7 @@ function postMessage(msg, channel) {
 
     options = {
         hostname: 'hooks.slack.com',
-        path: '/services/T03E23VAN/B03E4RPMW/Ll7ooC6utnGJ7S6flQQ0xOS8',
+        path: '/services/'+ slackTeam +'/B03E4RPMW/' + slackToken,
         method: 'POST'
     }
 
