@@ -1,7 +1,7 @@
 function formatForOffline(reply, presence) {
     if (presence.lastSeen) {
         reply += "Last seen: "
-        reply += formatDate(new Date(Date.parse(presence.lastSeen.timestamp))) + "\n"
+        reply += formatDate(new Date(Date.parse(presence.lastSeen.timestamp))) + "\\n"
         reply += "Playing: "
         reply += presence.lastSeen.titleName
     }

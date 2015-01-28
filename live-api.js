@@ -25,7 +25,7 @@ function getPresence(xuid){
 function prepareResponse(presenceJson) {
     var deferred = Q.defer(),
         presence = JSON.parse(presenceJson),
-        reply = gamertag + " is " + presence.state + "\n"
+        reply = gamertag + " is " + presence.state + "\\n"
     
     if (presence.state === "Offline") {
         reply = View.formatForOffline(reply, presence)
