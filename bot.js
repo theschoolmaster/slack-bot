@@ -11,14 +11,14 @@ function respond() {
         sourceChannel = request.channel_name,
         keyword       = request.trigger_word,
         sourceUser    = request.user_name,
-        message       = request.text
-        gamertag      = message.replace(RegExp(keyword + " "), "")
+        message       = request.text,
         self          = this
 
     console.log(request)
 
     if (request.text) {
         if (keyword == "!live") {
+            var gamertag = message.replace(RegExp(keyword + " "), "")
             XBL.getXuid(gamertag)
                 .then(XBL.getPresence)
                 .then(XBL.prepareResponse)
