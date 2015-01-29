@@ -7,8 +7,7 @@ function respond() {
     var request    = this.req.body,
         keyword    = request.trigger_word,
         sourceUser = request.user_name,
-        message    = request.text,
-        self       = this
+        message    = request.text
 
     console.log(request)
 
@@ -18,23 +17,22 @@ function respond() {
             .then(XBL.getPresence)
             .then(XBL.prepareResponse)
             .then(function(response){
-                replytWith(self, response)
-            })
+                replyWith.call(this, response)
+            }.bind(this))
             .catch(function(error) {
                 console.log(error)
             })
     }
 
     if (keyword == "!ping") {
-        replytWith(this, "pong!")
+        replyWith.call(this, "pong!")
     }
 }
 
-function replytWith(context, body) {
+function replyWith(body) {
     console.log("Replying with " + body)
-    context.res.writeHead(200, { 'Content-Type': 'application/json' })
-    context.res.end('{"text": "' + body + '"}')
+    this.res.writeHead(200, { 'Content-Type': 'application/json' })
+    this.res.end('{"text": "' + body + '"}')
 }
-
 
 exports.respond = respond
