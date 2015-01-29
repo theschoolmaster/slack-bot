@@ -4,33 +4,29 @@ HTTPS       = require('https')
 XBL         = require('./live-api.js')
 
 function respond() {
-    var request       = this.req.body,
-        sourceChannel = request.channel_name,
-        keyword       = request.trigger_word,
-        sourceUser    = request.user_name,
-        message       = request.text,
-        self          = this
+    var request    = this.req.body,
+        keyword    = request.trigger_word,
+        sourceUser = request.user_name,
+        message    = request.text,
+        self       = this
 
     console.log(request)
 
-    if (request.text) {
-        if (keyword == "!live") {
-            gamertag = message.replace(RegExp(keyword + " "), "")
-            XBL.getXuid(gamertag)
-                .then(XBL.getPresence)
-                .then(XBL.prepareResponse)
-                .then(function(response){
-                    // console.log(response)
-                    replytWith(self, response)
-                })
-                .catch(function(error) {
-                    console.log(error)
-                })
-        }
+    if (keyword == "!live") {
+        gamertag = message.replace(RegExp(keyword + " "), "")
+        XBL.getXuid(gamertag)
+            .then(XBL.getPresence)
+            .then(XBL.prepareResponse)
+            .then(function(response){
+                replytWith(self, response)
+            })
+            .catch(function(error) {
+                console.log(error)
+            })
+    }
 
-        if (keyword == "!ping") {
-            replytWith(this, "pong!")
-        }
+    if (keyword == "!ping") {
+        replytWith(this, "pong!")
     }
 }
 
