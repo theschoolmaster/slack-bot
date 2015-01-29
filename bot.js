@@ -16,12 +16,13 @@ function respond() {
         XBL.getXuid(gamertag)
             .then(XBL.getPresence)
             .then(XBL.prepareResponse)
-            .then(function(response){
+            .done(function(response){
                 replyWith.call(this, response)
+            }.bind(this),
+            function(err){
+                console.log(err)
+                replyWith.call(this, "An error occured. Check logs for details")
             }.bind(this))
-            .catch(function(error) {
-                console.log(error)
-            })
     }
 
     if (keyword == "!ping") {
