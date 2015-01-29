@@ -9,7 +9,7 @@
   "dependencies": {
     "director": "",
     "node-xbox": "^0.1.0",
-    "q": "^1.1.2"
+    "when": "^3.7.1"
   },
   "engines": {
     "node": "0.10.x"

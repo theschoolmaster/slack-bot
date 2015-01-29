@@ -3,10 +3,10 @@ var apiKey, xboxAp, View, Q
 apiKey  = process.env.XBOX_API
 xboxApi = require('node-xbox')(apiKey)
 View    = require('./live-views.js')
-Q       = require('q')
+when    = require('when')
 
 function getXuid(gamertag){
-    var deferred = Q.defer()
+    var deferred = when.defer()
     xboxApi.profile.xuid(gamertag, function(err, data){
         err ? deferred.reject(new Error(err)) : deferred.resolve(data)
     })
@@ -14,7 +14,7 @@ function getXuid(gamertag){
 }
 
 function getPresence(xuid){
-    var deferred = Q.defer()
+    var deferred = when.defer()
     xboxApi.profile.presence(xuid, function(err, data){
         err ? deferred.reject(new Error(err)) : deferred.resolve(data)
     })
@@ -23,7 +23,7 @@ function getPresence(xuid){
 
 
 function prepareResponse(presenceJson) {
-    var deferred = Q.defer(),
+    var deferred = when.defer(),
         presence = JSON.parse(presenceJson),
         reply = gamertag + " is " + presence.state + "\\n"
     
