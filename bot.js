@@ -1,9 +1,7 @@
-var HTTPS, XBL, slackTeam, slackToken
+var HTTPS, XBL
 
 HTTPS       = require('https')
 XBL         = require('./live-api.js')
-slackTeam   = process.env.SLACK_TEAM
-slackToken  = process.env.SLACK_TOKEN
 
 function respond() {
     var request       = this.req.body,
