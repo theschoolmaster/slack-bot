@@ -1,16 +1,21 @@
-var http     = require('http'),
-    director = require('director'),
-    bot      = require('./bot.js'),
-    port     = Number(process.env.PORT || 5000)
+var http, director, bot, router, server, port
 
-var router = new director.http.Router({
+http     = require('http')
+director = require('director')
+bot      = require('./bot.js')
+
+router = new director.http.Router({
     '/:keyword': {
         post: bot.respond,
         get: ping
     }
 })
 
-var server = http.createServer(function(req, res) {
+server = http.createServer(function(req, res) {
+    req.chunks = []
+    req.on('data', function(chunk) {
+        req.chunks.push(chunk.toString())
+    })
 
     router.dispatch(req, res, function(err) {
         res.writeHead(err.status, {

@@ -1,5 +1,9 @@
-var HTTPS = require('https'),
-    XBL   = require('./live-api.js')
+var HTTPS     = require('https'),
+    XBL       = require('./live-api.js'),
+    imgSearch = require('./imageSearch.js'),
+    slackHook  = require('./slackHook.js')
+
+
 
 function respond() {
     var request    = this.req.body,
@@ -25,6 +29,24 @@ function respond() {
 
     if (keyword == "!ping") {
         replyWith.call(this, "pong!")
+    }
+
+    if (keyword == "!kittenbomb") {
+        var options = {
+            "channel": "#" + request.channel_name,
+            "username": "KITTEHS!",
+            "icon_emoji": ":cat:"
+        }
+        imgSearch("cute kittens", options, slackHook)
+        replyWith("HERE COMES TEH KITTEHZ!!!!")
+    }
+
+    if (keyword === "!img") {
+        query  = message.replace(RegExp(keyword + " "), "")
+        imgSearch(query, function(err, images){
+            replyWith(images)
+        })
+
     }
 }
 
