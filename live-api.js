@@ -1,9 +1,7 @@
-var apiKey, xboxAp, View, Q
-
-apiKey  = process.env.XBOX_API
-xboxApi = require('node-xbox')(apiKey)
-View    = require('./live-views.js')
-when    = require('when')
+var apiKey  = process.env.XBOX_API,
+    xboxApi = require('node-xbox')(apiKey),
+    View    = require('./live-views.js'),
+    when    = require('when')
 
 function getXuid(gamertag){
     var deferred = when.defer()
