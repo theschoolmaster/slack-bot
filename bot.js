@@ -1,7 +1,5 @@
-var HTTPS, XBL
-
-HTTPS       = require('https')
-XBL         = require('./live-api.js')
+var HTTPS = require('https'),
+    XBL   = require('./live-api.js')
 
 function respond() {
     var request    = this.req.body,
