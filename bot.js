@@ -42,10 +42,14 @@ function respond() {
     }
 
     if (keyword === "!img") {
-        query  = message.replace(RegExp(keyword + " "), "")
-        imgSearch(query, function(err, images){
-            replyWith(images)
-        })
+        var query  = message.replace(RegExp(keyword + " "), "")
+        var options = {
+            "channel": "#" + request.channel_name,
+            "username": "imgBot",
+            "icon_emoji": ":goomba: "
+        }
+        imgSearch(query, options, slackHook)
+        replyWith.call(this, "Image forthcoming...")
 
     }
 }
