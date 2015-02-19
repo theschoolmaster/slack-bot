@@ -46,10 +46,10 @@ function respond() {
         var options = {
             "channel": "#" + request.channel_name,
             "username": "imgBot",
-            "icon_emoji": ":goomba: "
+            "icon_emoji": ":space_invader:"
         }
         imgSearch(query, options, slackHook)
-        replyWith.call(this, "Image forthcoming...")
+        replyWith.call(this, "Images forthcoming...")
 
     }
 }
