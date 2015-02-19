@@ -1,11 +1,15 @@
 var client = require("google-images2")
 
-function retrieveImages(queryString, options, cb){
+function retrieveImages(queryString, options, cb, limit){
 
     client.search(queryString, function(err, images){
-        images.forEach(function(obj){
-            cb(obj.url, options)
-        })
+        if (limit){
+            cb(images[0].url, options)
+        } else {
+            images.forEach(function(obj){
+                cb(obj.url, options)
+            })
+        }
     })
 
 }

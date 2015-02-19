@@ -16,6 +16,7 @@ function postMessage(botResponse, body) {
     body["unfurl_links"] = true
 
     console.log('sending ' + botResponse + ' to Slack channel: #' + body.channel)
+    console.log(body)
 
     botReq = HTTPS.request(options, function(res) {
         if (res.statusCode == 200) {
