@@ -13,6 +13,10 @@ function respond() {
 
     console.log(request)
 
+    if (sourceUser == "jugularrain-whisky"){
+        replyWith.call(this, "Suck a dick, Jug")
+    }
+
     if (keyword == "!live") {
         gamertag = message.replace(RegExp(keyword + " "), "")
         XBL.getXuid(gamertag)
@@ -42,14 +46,20 @@ function respond() {
     }
 
     if (keyword === "!img") {
-        var query  = message.replace(RegExp(keyword + " "), "")
-        var options = {
-            "channel": "#" + request.channel_name,
-            "username": "imgBot",
-            "icon_emoji": ":space_invader:"
+        
+        if (sourceUser === "jugularrain-whisky"){
+            replyWith.call(this, "Suck a dick, Jug")
+        } else {
+
+            var query  = message.replace(RegExp(keyword + " "), "")
+            var options = {
+                "channel": "#" + request.channel_name,
+                "username": "imgBot",
+                "icon_emoji": ":space_invader:"
+            }
+            imgSearch(query, options, slackHook, true)
+            replyWith.call(this, "Images forthcoming...")
         }
-        imgSearch(query, options, slackHook, true)
-        replyWith.call(this, "Images forthcoming...")
 
     }
 }
