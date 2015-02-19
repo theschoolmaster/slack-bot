@@ -38,7 +38,7 @@ function respond() {
             "icon_emoji": ":cat:"
         }
         imgSearch("cute kittens", options, slackHook)
-        replyWith("HERE COMES TEH KITTEHZ!!!!")
+        replyWith.call(this, "HERE COMES TEH KITTEHZ!!!!")
     }
 
     if (keyword === "!img") {
