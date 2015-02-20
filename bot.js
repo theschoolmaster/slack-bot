@@ -73,7 +73,7 @@ function respond() {
 function replyWith(body) {
     console.log("Replying with " + body)
     this.res.writeHead(200, { 'Content-Type': 'application/json' })
-    this.res.end('{"text": "' + body + '"}')
+    this.res.end('{"text": "' + body + '", "unfurl_links": true}')
 }
 
 exports.respond = respond
