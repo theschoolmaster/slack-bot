@@ -5,7 +5,8 @@ var BANNED_USER_IDS = [
 var HTTPS     = require('https'),
     XBL       = require('./live-api.js'),
     imgSearch = require('./imageSearch.js'),
-    slackHook = require('./slackHook.js')
+    slackHook = require('./slackHook.js'),
+    urbanDict = require("./urban.js")
 
 
 
@@ -36,6 +37,11 @@ function respond() {
             }.bind(this))
     }
 
+    if (keyword == "!urban") {
+        var term  = message.replace(RegExp(keyword + " "), "")
+        urbanDict.define.apply(this, [term, replyWith])
+    }
+
     if (keyword == "!ping") {
         replyWith.call(this, "pong!")
     }
@@ -51,7 +57,6 @@ function respond() {
     }
 
     if (keyword === "!img") {
-        
         var query  = message.replace(RegExp(keyword + " "), "")
         var options = {
             "channel": "#" + request.channel_name,
@@ -70,6 +75,5 @@ function replyWith(body) {
     this.res.writeHead(200, { 'Content-Type': 'application/json' })
     this.res.end('{"text": "' + body + '"}')
 }
-
 
 exports.respond = respond
