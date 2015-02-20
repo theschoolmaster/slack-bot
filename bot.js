@@ -1,3 +1,7 @@
+var BANNED_USER_IDS = [
+    "U03HTQ2GC" //jug
+]
+
 var HTTPS     = require('https'),
     XBL       = require('./live-api.js'),
     imgSearch = require('./imageSearch.js'),
@@ -13,8 +17,9 @@ function respond() {
 
     console.log(request)
 
-    if (sourceUser == "jugularrain-whisky"){
-        replyWith.call(this, "Suck a dick, Jug")
+    if (BANNED_USER_IDS.indexOf(request.user_id) !== -1){
+        replyWith.call(this, "POOL'S CLOSED")
+        return
     }
 
     if (keyword == "!live") {
@@ -47,19 +52,15 @@ function respond() {
 
     if (keyword === "!img") {
         
-        if (sourceUser === "jugularrain-whisky"){
-            replyWith.call(this, "Suck a dick, Jug")
-        } else {
-
-            var query  = message.replace(RegExp(keyword + " "), "")
-            var options = {
-                "channel": "#" + request.channel_name,
-                "username": "imgBot",
-                "icon_emoji": ":space_invader:"
-            }
-            imgSearch(query, options, slackHook, true)
-            replyWith.call(this, "Image forthcoming...")
+        var query  = message.replace(RegExp(keyword + " "), "")
+        var options = {
+            "channel": "#" + request.channel_name,
+            "username": "imgBot",
+            "icon_emoji": ":space_invader:"
         }
+        imgSearch(query, options, slackHook, true)
+        replyWith.call(this, "Image forthcoming...")
+        
 
     }
 }
@@ -69,5 +70,6 @@ function replyWith(body) {
     this.res.writeHead(200, { 'Content-Type': 'application/json' })
     this.res.end('{"text": "' + body + '"}')
 }
+
 
 exports.respond = respond
