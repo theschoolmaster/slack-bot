@@ -1,7 +1,7 @@
 var HTTPS     = require('https'),
     XBL       = require('./live-api.js'),
     imgSearch = require('./imageSearch.js'),
-    slackHook  = require('./slackHook.js')
+    slackHook = require('./slackHook.js')
 
 
 
@@ -58,7 +58,7 @@ function respond() {
                 "icon_emoji": ":space_invader:"
             }
             imgSearch(query, options, slackHook, true)
-            replyWith.call(this, "Images forthcoming...")
+            replyWith.call(this, "Image forthcoming...")
         }
 
     }
