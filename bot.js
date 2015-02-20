@@ -1,6 +1,5 @@
-var BANNED_USER_IDS = [
-    "U03HTQ2GC" //jug
-]
+var RESTIRCTED_ROOMS,
+    RESTRICTED_USERS = ["U03HTQ2GC"]
 
 var HTTPS     = require('https'),
     XBL       = require('./live-api.js'),
@@ -18,7 +17,7 @@ function respond() {
 
     console.log(request)
 
-    if (BANNED_USER_IDS.indexOf(request.user_id) !== -1){
+    if (RESTRICTED_USERS.indexOf(request.user_id) !== -1){
         replyWith.call(this, "POOL'S CLOSED")
         return
     }
