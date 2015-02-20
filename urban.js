@@ -3,8 +3,13 @@ var urban = require('urban')
 function define(input, cb){
     var term = urban(input)
 
+        debugger
     term.first(function(json) {
-        cb.call(this, json.definition)
+        if (!json) {
+            cb.call(this, "Word not found")
+        } else {
+            cb.call(this, json.definition)
+        }
     }.bind(this))
 
 }
