@@ -4,7 +4,7 @@ function define(input, cb){
     var term = urban(input)
 
     term.first(function(json) {
-        cb.call(this, json.permalink)
+        cb.call(this, json.definition)
     }.bind(this))
 
 }
