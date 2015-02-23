@@ -10,6 +10,7 @@
     "director": "",
     "google-images2": "^0.1.0",
     "node-xbox": "^0.1.0",
+    "request": "^2.53.0",
     "urban": "^0.2.3",
     "when": "^3.7.1"
   },

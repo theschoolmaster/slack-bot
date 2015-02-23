@@ -5,7 +5,8 @@ var HTTPS     = require('https'),
     XBL       = require('./live-api.js'),
     imgSearch = require('./imageSearch.js'),
     slackHook = require('./slackHook.js'),
-    urbanDict = require("./urban.js")
+    urbanDict = require("./urban.js"),
+    cwFeed    = require("./bh-clanFeed.js")
 
 
 
@@ -64,6 +65,16 @@ function respond() {
         }
         imgSearch(query, options, slackHook, true)
         return
+    }
+
+    if (keyword == "!cwfeed") {
+        cwFeed.logIn()
+            .then(cwFeed.setCookie)
+            .then(cwFeed.update)
+            .done(function(resp){
+                var r = JSON.stringify(JSON.parse(resp).events[0][1]).replace(/\"/g, "'")
+                replyWith.call(this, r)
+            }.bind(this))
     }
 }
 

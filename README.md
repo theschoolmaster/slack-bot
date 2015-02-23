@@ -1,10 +1,6 @@
-#xblBot
+#slackBot
 
 This bot was originally created for freenode#reddit-naw.
 
-Now he lives on heroku and uses node and Slack.
+Now he lives on heroku and uses node and Slack's API.
 
-
-## Current commands
-
-- '!live GAMERTAG'
