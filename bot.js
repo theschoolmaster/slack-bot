@@ -23,6 +23,7 @@ function respond() {
         return
     }
 
+
     if (keyword == "!live") {
         gamertag = message.replace(RegExp(keyword + " "), "")
         XBL.getXuid(gamertag)
@@ -37,14 +38,17 @@ function respond() {
             }.bind(this))
     }
 
+
     if (keyword == "!urban") {
         var term  = message.replace(RegExp(keyword + " "), "")
         urbanDict.define.apply(this, [term, replyWith])
     }
 
+
     if (keyword == "!ping") {
         replyWith.call(this, "pong!")
     }
+
 
     if (keyword == "!kittenbomb") {
         var options = {
@@ -55,6 +59,7 @@ function respond() {
         imgSearch("cute kittens", options, slackHook)
         replyWith.call(this, "HERE COMES TEH KITTEHZ!!!!")
     }
+
 
     if (keyword === "!img") {
         var query  = message.replace(RegExp(keyword + " "), "")
@@ -67,14 +72,55 @@ function respond() {
         return
     }
 
+
     if (keyword == "!cwfeed") {
-        cwFeed.logIn()
-            .then(cwFeed.setCookie)
-            .then(cwFeed.update)
-            .done(function(resp){
-                var r = JSON.stringify(JSON.parse(resp).events[0][1]).replace(/\"/g, "'")
-                replyWith.call(this, r)
-            }.bind(this))
+        var command  = message.replace(RegExp(keyword + " "), "")
+
+        var options = {
+            "channel": "#" + request.channel_name,
+            "username": "cwFeed",
+            "icon_emoji": ":space_invader:"
+        }
+        if (command === "on"){
+
+            if (!cwFeed.loggedIn()){
+
+                cwFeed.logIn().then(cwFeed.setCookie).then(cwFeed.update)
+                    .done(function(data){
+
+                        var processId = setInterval(function(){
+                            slackHook("testing setInterval", options)
+                        }.bind(this), 31000)
+
+                        cwFeed.setClanFeedId(processId)
+                    })
+
+                return
+
+            } else {
+                cwFeed.update(cwFeed.codCookie())
+                    .done(function(data){
+                        var processId = setInterval(function(){
+                            slackHook("testing setInterval", options)
+                        }.bind(this), 31000)
+
+                        cwFeed.setClanFeedId(processId)
+                    })
+                return
+            }
+        }
+
+
+        if (command === "off" && cwFeed.clanFeedId()){
+            var processId = cwFeed.clanFeedId() 
+            clearInterval( processId )
+            cwFeed.setClanFeedId(0)
+            slackHook("test: interval cleared", options)
+            return
+        } else if (command === "off") {
+            slackHook("No current clan war feed running", options)
+            return
+        }
     }
 }
 

@@ -1,6 +1,7 @@
 var request = require("request"),
     when    = require('when'),
-    codCookie
+    CLAN_WAR_FEED_ID
+    
 
 function logIn() {
     var deferred = when.defer()
@@ -67,10 +68,34 @@ function update() {
     return deferred.promise
 }
 
+function currentClanFeedRunning(){
+    return !!clanFeedId()
+}
+
+function clanFeedId(){
+    return CLAN_WAR_FEED_ID
+}
+
+function setClanFeedId(id){
+    CLAN_WAR_FEED_ID = id
+}
+
+function loggedIn(){
+    return !!process.env.COD_COOKIE
+}
+
+function codCookie(){
+    return process.env.COD_COOKIE
+}
 // logIn().then(setCookieInEnv).done(update)
 
 module.exports = {
     logIn: logIn,
     update: update,
-    setCookie: setCookieInEnv
+    setCookie: setCookieInEnv,
+    clanFeedId: clanFeedId,
+    currentClanFeedRunning: currentClanFeedRunning,
+    codCookie: codCookie,
+    loggedIn: loggedIn,
+    setClanFeedId: setClanFeedId
 }
