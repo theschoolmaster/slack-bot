@@ -22,17 +22,6 @@ function idsArray(group){
     })
 }
 
-function isAdmin(userId){
-    var ids = idsArray(ADMINS)
-    return ids.indexOf(userId) === -1 ? false : true
-}
-
-function isRestrictedUser(userId){
-    debugger
-    var ids = idsArray(RESTRICTED_USERS)
-    return ids.indexOf(userId) === -1 ? false : true
-}
-
 function accessGenerator(userId, objArray){
     return function(usrId){
         var ids = idsArray(objArray)
@@ -41,6 +30,6 @@ function accessGenerator(userId, objArray){
 }
 
 module.exports = {
-    isAdmin: isAdmin,
-    isRestrictedUser: isRestrictedUser
+    isAdmin: accessGenerator(null, ADMINS),
+    isRestrictedUser: accessGenerator(null, RESTRICTED_USERS)
 }
