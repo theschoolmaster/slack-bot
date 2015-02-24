@@ -1,5 +1,6 @@
 var RESTIRCTED_ROOMS,
-    RESTRICTED_USERS = ["U03HTQ2GC"]
+    RESTRICTED_USERS = [{ id: 'U03HTQ2GC', name: 'jugularrain-whisky' }],
+    ADMINS = [{ id: 'U03E23VAS', name: 'audibleblink' }]
 
 var HTTPS     = require('https'),
     XBL       = require('./live-api.js'),
@@ -18,7 +19,7 @@ function respond() {
 
     console.log(request)
 
-    if (RESTRICTED_USERS.indexOf(request.user_id) !== -1){
+    if (isRestrictedUser(request.user_id) !== -1){
         replyWith.call(this, "POOL'S CLOSED")
         return
     }
@@ -73,6 +74,12 @@ function respond() {
 
 
     if (keyword == "!cwfeed") {
+
+        if (!isAdmin(request.user_id)){
+            replyWith.call(this, "Only a mod can start this tool")
+            return
+        }
+
         var command  = message.replace(RegExp(keyword + " "), "")
 
         var options = {
@@ -83,6 +90,11 @@ function respond() {
 
 
         if (command === "on"){
+
+            if(cwFeed.clanFeedId()){
+                replyWith.call(this, "Feed Running in another channel")
+                return
+            }
 
             if (!cwFeed.loggedIn()){
 
@@ -121,5 +133,32 @@ function replyWith(body) {
     this.res.writeHead(200, { 'Content-Type': 'application/json' })
     this.res.end('{"text": "' + body + '", "unfurl_links": true}')
 }
+
+function valuesFor(obj){
+    var vals = [];
+    for( var key in obj ) {
+        if ( obj.hasOwnProperty(key) ) {
+            vals.push(obj[key]);
+        }
+    }
+    return vals;
+}
+
+function idsArray(group){
+    return group.map(function(el){
+        return valuesFor(el)[0]
+    })
+}
+
+function isAdmin(userId){
+    var ids = idsArray(ADMINS)
+    return ids.indexOf(userId) === -1 ? false : true
+}
+
+function isRestrictedUser(userId){
+    var ids = idsArray(RESTRICTED_USERS)
+    return ids.indexOf(userId) === -1 ? false : true
+}
+
 
 exports.respond = respond
