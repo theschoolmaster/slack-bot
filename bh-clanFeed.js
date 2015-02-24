@@ -1,6 +1,7 @@
 var request = require("request"),
     when    = require('when'),
-    CLAN_WAR_FEED_ID
+    CLAN_WAR_FEED_ID,
+    PREV_FEED = 0
     
 
 function logIn() {
@@ -87,6 +88,28 @@ function loggedIn(){
 function codCookie(){
     return process.env.COD_COOKIE
 }
+
+function activityString(resp) {
+    return "Test: +5 to Domination"
+}
+
+function setAndReply(options, cb){
+    var processId = setInterval(function(){
+        update().done( function(resp){
+            var events = JSON.parse(resp).events
+            debugger
+            if (JSON.stringify(PREV_FEED) !== JSON.stringify(events)){
+                PREV_FEED = events
+                var reply = activityString(events)
+                cb(reply, options) 
+            } else {
+                cb("Test: No new wins", options)
+            }
+        })
+    }, 31000)
+    setClanFeedId(processId)
+}
+
 // logIn().then(setCookieInEnv).done(update)
 
 module.exports = {
@@ -97,5 +120,6 @@ module.exports = {
     currentClanFeedRunning: currentClanFeedRunning,
     codCookie: codCookie,
     loggedIn: loggedIn,
-    setClanFeedId: setClanFeedId
+    setClanFeedId: setClanFeedId,
+    setAndReply: setAndReply
 }

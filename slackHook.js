@@ -2,9 +2,8 @@ var slackTeam   = process.env.SLACK_TEAM,
     slackToken  = process.env.SLACK_TOKEN,
     HTTPS       = require('https')
 
-
 function postMessage(botResponse, body) {
-    var options, body, botReq
+    var options, botReq
 
     options = {
         hostname: 'hooks.slack.com',

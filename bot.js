@@ -69,7 +69,6 @@ function respond() {
             "icon_emoji": ":space_invader:"
         }
         imgSearch(query, options, slackHook, true)
-        return
     }
 
 
@@ -81,45 +80,38 @@ function respond() {
             "username": "cwFeed",
             "icon_emoji": ":space_invader:"
         }
+
+
         if (command === "on"){
 
             if (!cwFeed.loggedIn()){
 
-                cwFeed.logIn().then(cwFeed.setCookie).then(cwFeed.update)
+                cwFeed.logIn().then(cwFeed.setCookie)
                     .done(function(data){
+                        // debugger
+                        cwFeed.setAndReply(options, slackHook)
+                        replyWith.call(this, "Clan War Feed Initiated")
 
-                        var processId = setInterval(function(){
-                            slackHook("testing setInterval", options)
-                        }.bind(this), 31000)
-
-                        cwFeed.setClanFeedId(processId)
-                    })
-
-                return
-
+                    }.bind(this))
             } else {
-                cwFeed.update(cwFeed.codCookie())
+                cwFeed.update()
                     .done(function(data){
-                        var processId = setInterval(function(){
-                            slackHook("testing setInterval", options)
-                        }.bind(this), 31000)
+                        cwFeed.setAndReply(options, slackHook)
+                        replyWith.call(this, "Clan War Feed Initiated")
 
-                        cwFeed.setClanFeedId(processId)
-                    })
-                return
+                    }.bind(this))
             }
         }
 
 
-        if (command === "off" && cwFeed.clanFeedId()){
-            var processId = cwFeed.clanFeedId() 
-            clearInterval( processId )
-            cwFeed.setClanFeedId(0)
-            slackHook("test: interval cleared", options)
-            return
-        } else if (command === "off") {
-            slackHook("No current clan war feed running", options)
-            return
+        if (command === "off" ){
+            if (cwFeed.clanFeedId()){
+                clearInterval( cwFeed.clanFeedId() )
+                cwFeed.setClanFeedId(0)
+                replyWith.call(this, "Clan War Feed Halted")
+            } else {
+                replyWith.call(this, "No clan war feed is running")
+            }
         }
     }
 }
