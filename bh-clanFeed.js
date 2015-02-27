@@ -89,14 +89,15 @@ function codCookie(){
     return process.env.COD_COOKIE
 }
 
-function activityString(resp) {
-    return "Test: +5 to Domination"
-}
+// function activityString(resp) {
+//     return "Test: +5 to Domination"
+// }
 
 function setAndReply(options, cb){
     var processId = setInterval(function(){
         update().done( function(resp){
             var events = JSON.parse(resp).events
+            console.log(events)
             debugger
             if (JSON.stringify(PREV_FEED) !== JSON.stringify(events)){
                 PREV_FEED = events
@@ -108,6 +109,23 @@ function setAndReply(options, cb){
         })
     }, 31000)
     setClanFeedId(processId)
+}
+
+function activityString(events){
+    return stringifyEvent(events[0])
+}
+
+function stringifyEvent(event){
+    var timestamp = event[0],
+        clanEvent = event[1],
+        reply = ""
+
+    reply += ("+" + clanEvent.gamertags.length) + " points for game mode: "
+    reply += clanEvent.value + ":\n"
+    reply += "Players: " + clanEvent.gamertags.join(" ")
+
+    return reply
+
 }
 
 // logIn().then(setCookieInEnv).done(update)
