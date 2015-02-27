@@ -55,6 +55,7 @@ function respond() {
             "icon_emoji": ":space_invader:"
         }
         imgSearch(query, options, slackHook, true)
+        replyWith.call(this, "")
     }
 
 
