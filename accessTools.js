@@ -3,7 +3,9 @@ var RESTIRCTED_ROOMS,
         { id: 'U03HTQ2GC', name: 'jugularrain-whisky' }
     ],
     ADMINS = [
-        { id: 'U03E23VAS', name: 'audibleblink' }
+        { id: 'U03E23VAS', name: 'audibleblink' },
+        { id: 'U03E393TU', name: 'lasagnawoof' },
+        { id: 'U03E14JAX', name: 'jekku0966' }
     ]
 
 function valuesFor(obj){
