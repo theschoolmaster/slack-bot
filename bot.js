@@ -47,17 +47,6 @@ function respond() {
     }
 
 
-    if (keyword == "!kittenbomb") {
-        var options = {
-            "channel": "#" + request.channel_name,
-            "username": "KITTEHS!",
-            "icon_emoji": ":cat:"
-        }
-        imgSearch("cute kittens", options, slackHook)
-        replyWith.call(this, "HERE COMES TEH KITTEHZ!!!!")
-    }
-
-
     if (keyword === "!img") {
         var query  = message.replace(RegExp(keyword + " "), "")
         var options = {
