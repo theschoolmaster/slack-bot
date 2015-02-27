@@ -42,10 +42,12 @@ function update() {
     var baseUrl = "https://ec2-api.prod.beachheadstudio.com/aw/clan_wars/waric/1176310/since/"
     var params = "?session_token=" + process.env.COD_COOKIE + "&network=xbl"
     var nowTime = new Date
-    var sinceTime = new Date(nowTime - 31000) //31 seconds
+    var tempTime = new Date(nowTime - 31000) //31 seconds
+    var sinceTime = (tempTime.getTime()).toString().slice(0,10)
     var options = {
-        // 0 for testing. needs to be epoch time 31 seconds ago
-        url: baseUrl + 1422772630 + params, //sinceTime.getTime(),
+        // needs to be epoch time 31 seconds ago
+        // url: baseUrl + 1425064596 + params, // static since time 1425075936219
+        url: baseUrl + sinceTime + params, //31 seconds in the past
         headers: {
             "Cookie": "token=" + process.env.COD_COOKIE + ";",
             "User-Agent": "Blacksmith%20Dev/840 CFNetwork/711.1.12 Darwin/14.0.0",
@@ -89,10 +91,6 @@ function codCookie(){
     return process.env.COD_COOKIE
 }
 
-// function activityString(resp) {
-//     return "Test: +5 to Domination"
-// }
-
 function setAndReply(options, cb){
     var processId = setInterval(function(){
         update().done( function(resp){
@@ -112,7 +110,7 @@ function setAndReply(options, cb){
 }
 
 function activityString(events){
-    return stringifyEvent(events[0])
+    return events.length ? stringifyEvent(events[0]) : "No current clanwar data"
 }
 
 function stringifyEvent(event){
@@ -128,7 +126,6 @@ function stringifyEvent(event){
 
 }
 
-// logIn().then(setCookieInEnv).done(update)
 
 module.exports = {
     logIn: logIn,
