@@ -1,5 +1,6 @@
 var request = require("request"),
     when    = require('when'),
+    View    = require('./bh-views.js'),
     CLAN_WAR_FEED_ID,
     PREV_FEED = 0
     
@@ -45,8 +46,7 @@ function update() {
     var tempTime = new Date(nowTime - 31000) //31 seconds
     var sinceTime = (tempTime.getTime()).toString().slice(0,10)
     var options = {
-        // needs to be epoch time 31 seconds ago
-        // url: baseUrl + 1425064596 + params, // static since time 1425075936219
+        // url: baseUrl + 1425064596 + params, // static since time
         url: baseUrl + sinceTime + params, //31 seconds in the past
         headers: {
             "Cookie": "token=" + process.env.COD_COOKIE + ";",
@@ -71,10 +71,6 @@ function update() {
     return deferred.promise
 }
 
-function currentClanFeedRunning(){
-    return !!clanFeedId()
-}
-
 function clanFeedId(){
     return CLAN_WAR_FEED_ID
 }
@@ -91,48 +87,28 @@ function codCookie(){
     return process.env.COD_COOKIE
 }
 
-function setAndReply(options, cb){
+function setAndReply(options, respond){
     var processId = setInterval(function(){
         update().done( function(resp){
             var events = JSON.parse(resp).events
             console.log(events)
-            debugger
             if (JSON.stringify(PREV_FEED) !== JSON.stringify(events)){
                 PREV_FEED = events
-                var reply = activityString(events)
-                cb(reply, options) 
+                View.filter(events, 7)
+                    .forEach(function(winEvent){
+                        respond( View.stringify(winEvent), options ) 
+                    })
             } 
         })
     }, 31000)
     setClanFeedId(processId)
 }
 
-function activityString(events){
-    var newEvents = events
-        .map(function(el){ return el[1] })
-        .filter(function(el){return el.actor === 7})
-    return newEvents.length ? stringifyEvent(newEvents[0]) : ""
-}
-
-function stringifyEvent(event){
-    var reply = ""
-
-    reply += ("+" + event.gamertags.length) + " points for game mode: "
-    reply += event.value + ":\n"
-    reply += "Players: " + event.gamertags.join(", ")
-
-    return reply
-
-}
-
-
 module.exports = {
     logIn: logIn,
     update: update,
     setCookie: setCookieInEnv,
     clanFeedId: clanFeedId,
-    currentClanFeedRunning: currentClanFeedRunning,
-    codCookie: codCookie,
     loggedIn: loggedIn,
     setClanFeedId: setClanFeedId,
     setAndReply: setAndReply

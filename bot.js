@@ -86,7 +86,6 @@ function respond() {
 
                 cwFeed.logIn().then(cwFeed.setCookie)
                     .done(function(data){
-                        // debugger
                         cwFeed.setAndReply(options, slackHook)
                         replyWith.call(this, "Clan War Feed Initiated")
 
