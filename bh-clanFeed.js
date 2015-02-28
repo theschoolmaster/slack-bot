@@ -101,26 +101,25 @@ function setAndReply(options, cb){
                 PREV_FEED = events
                 var reply = activityString(events)
                 cb(reply, options) 
-            } else {
-                cb("Test: No new wins", options)
-            }
+            } 
         })
     }, 31000)
     setClanFeedId(processId)
 }
 
 function activityString(events){
-    return events.length ? stringifyEvent(events[0]) : "No current clanwar data"
+    var newEvents = events
+        .map(function(el){ return el[1] })
+        .filter(function(el){return el.actor === 7})
+    return newEvents.length ? stringifyEvent(newEvents[0]) : "No current clanwar data"
 }
 
 function stringifyEvent(event){
-    var timestamp = event[0],
-        clanEvent = event[1],
-        reply = ""
+    var reply = ""
 
-    reply += ("+" + clanEvent.gamertags.length) + " points for game mode: "
-    reply += clanEvent.value + ":\n"
-    reply += "Players: " + clanEvent.gamertags.join(" ")
+    reply += ("+" + event.gamertags.length) + " points for game mode: "
+    reply += event.value + ":\n"
+    reply += "Players: " + event.gamertags.join(" ")
 
     return reply
 
