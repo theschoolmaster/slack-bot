@@ -1,7 +1,7 @@
 {
-    "name": "Nawbot",
-    "description": "Node bot for the Reddit Casual Team",
+    "name": "casBot",
+    "description": "Node bot for the Reddit Casual Slack Team",
     "repository": "https://github.com/audiblelbink/slack-bot",
     "logo": "",
-    "keywords": []
+    "keywords": ["cod", "xboxlive", "slack", "beachhead"]
 }
