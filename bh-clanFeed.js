@@ -111,7 +111,7 @@ function activityString(events){
     var newEvents = events
         .map(function(el){ return el[1] })
         .filter(function(el){return el.actor === 7})
-    return newEvents.length ? stringifyEvent(newEvents[0]) : "No current clanwar data"
+    return newEvents.length ? stringifyEvent(newEvents[0]) : ""
 }
 
 function stringifyEvent(event){
@@ -119,7 +119,7 @@ function stringifyEvent(event){
 
     reply += ("+" + event.gamertags.length) + " points for game mode: "
     reply += event.value + ":\n"
-    reply += "Players: " + event.gamertags.join(" ")
+    reply += "Players: " + event.gamertags.join(", ")
 
     return reply
 
