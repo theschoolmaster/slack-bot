@@ -82,22 +82,8 @@ function respond() {
                 return
             }
 
-            if (!cwFeed.loggedIn()){
-
-                cwFeed.logIn().then(cwFeed.setCookie)
-                    .done(function(data){
-                        cwFeed.setAndReply(options, slackHook)
-                        replyWith.call(this, "Clan War Feed Initiated")
-
-                    }.bind(this))
-            } else {
-                cwFeed.update()
-                    .done(function(data){
-                        cwFeed.setAndReply(options, slackHook)
-                        replyWith.call(this, "Clan War Feed Initiated")
-
-                    }.bind(this))
-            }
+            cwFeed.setAndReply(options, slackHook)
+            replyWith.call(this, "Clan War Feed Initiated")
         }
 
 
