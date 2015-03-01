@@ -1,5 +1,5 @@
 var MODES = {
-    "1": "GAMETYPE",
+    "1": "KC",
     "2": "GAMETYPE",
     "3": "CTF",
     "4": "TDM",
