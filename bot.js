@@ -49,13 +49,7 @@ function respond() {
 
     if (keyword === "!img") {
         var query  = message.replace(RegExp(keyword + " "), "")
-        var options = {
-            "channel": "#" + request.channel_name,
-            "username": "imgBot",
-            "icon_emoji": ":space_invader:"
-        }
-        imgSearch(query, options, slackHook, true)
-        replyWith.call(this, "")
+        imgSearch.apply(this, [query, replyWith])
     }
 
 
