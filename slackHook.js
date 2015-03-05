@@ -1,5 +1,6 @@
 var slackTeam   = process.env.SLACK_TEAM,
     slackToken  = process.env.SLACK_TOKEN,
+    middlePart  = process.env.MIDDLE_PART,
     HTTPS       = require('https')
 
 function postMessage(botResponse, body) {
@@ -7,7 +8,7 @@ function postMessage(botResponse, body) {
 
     options = {
         hostname: 'hooks.slack.com',
-        path: '/services/'+ slackTeam +'/B03E4RPMW/' + slackToken,
+        path: '/services/'+ slackTeam +'/' + middlePart + '/' + slackToken,
         method: 'POST'
     }
 
