@@ -1,6 +1,4 @@
-var request = require("request"),
-    when    = require('when'),
-    View    = require('./bh-views.js'),
+var View    = require('./bh-views.js'),
     clanWar = require('bh-api')(process.env.COD_USER, process.env.COD_PASS),
     CLAN_WAR_FEED_ID,
     PREV_FEED = 0
