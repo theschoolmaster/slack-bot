@@ -7,7 +7,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "bh-api": "^0.1.0",
+    "bh-api": "^0.2.0",
     "director": "",
     "google-images2": "^0.1.0",
     "node-xbox": "^0.1.0",
