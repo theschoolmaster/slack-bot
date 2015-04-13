@@ -1,11 +1,11 @@
 var MODES = {
-    "1": "KC",
+    "1": "HardPoint",
     "2": "GAMETYPE",
     "3": "CTF",
     "4": "TDM",
     "5": "Dom",
     "6": "GAMETYPE",
-    "7": "HardPoint",
+    "7": "KC",
     "8": "HCTDM",
     "9": "GAMETYPE",
     "10": "GAMETYPE"
