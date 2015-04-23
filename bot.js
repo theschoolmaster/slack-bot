@@ -52,6 +52,10 @@ function respond() {
         imgSearch.apply(this, [query, replyWith])
     }
 
+    if (keyword === "!gif") {
+        var query  = message.replace(RegExp(keyword + " "), "")
+        imgSearch.apply(this, [query, replyWith])
+    }
 
     if (keyword == "!cwfeed") {
 
